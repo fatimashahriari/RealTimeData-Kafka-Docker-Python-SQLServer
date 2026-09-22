@@ -4,7 +4,7 @@ You can copy it into a file named **README.md** and save it directly.
 ---
 
 ```markdown
-# 📘 Real‑Time Kafka → SQL Server Pipeline (Electricity Flows)
+# Real‑Time Kafka → SQL Server Pipeline (Electricity Flows)
 
 This project demonstrates a complete real‑time data pipeline:
 
@@ -19,7 +19,7 @@ It includes:
 
 ---
 
-## 🚀 1. Prerequisites
+## 1. Prerequisites
 
 Install the following:
 
@@ -48,7 +48,7 @@ setx API_KEY "your_api_key_here"
 
 ---
 
-## 🗂 2. Project Structure
+## 2. Project Structure
 
 ```
 realtime-kafka-docker-sqlserver-pipeline/
@@ -61,7 +61,7 @@ realtime-kafka-docker-sqlserver-pipeline/
 
 ---
 
-## 🐳 3. Start Kafka + Zookeeper + Kafka UI
+## 3. Start Kafka + Zookeeper + Kafka UI
 
 Make sure Docker Desktop is running.
 
@@ -87,7 +87,7 @@ http://localhost:8080
 
 ---
 
-## ⚙️ 4. Kafka Configuration (docker-compose.yml)
+## 4. Kafka Configuration (docker-compose.yml)
 
 Kafka is configured to be reachable from Windows Python scripts:
 
@@ -99,49 +99,13 @@ This is required because Kafka runs in Docker (Linux) and Python runs on Windows
 
 ---
 
-## 🗄 5. SQL Server Setup
+## 5. SQL Server Setup
 
-Run the following SQL script in SSMS:
-
-```sql
-IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'KAFKA_ELECTRICITY')
-BEGIN
-    CREATE DATABASE KAFKA_ELECTRICITY;
-END
-GO
-
-USE KAFKA_ELECTRICITY;
-GO
-
-IF NOT EXISTS (SELECT name FROM sys.schemas WHERE name = 'RAW_DATA')
-BEGIN
-    CREATE SCHEMA RAW_DATA;
-END
-GO
-
-IF NOT EXISTS(
-    SELECT 1 FROM sys.tables t
-    JOIN sys.schemas s ON t.schema_id = s.schema_id
-    WHERE t.name = 'ELECTRICITY_FLOWS' AND s.name = 'RAW_DATA'
-)
-BEGIN
-    CREATE TABLE RAW_DATA.ELECTRICITY_FLOWS(
-        zone NVARCHAR(50),
-        temporalGranularity NVARCHAR(10),
-        unit NVARCHAR(10),
-        datetime DATETIME2,
-        updatedAt DATETIME2,
-        value FLOAT,
-        import BIT,
-        export BIT
-    );
-END
-GO
-```
+Run the SQL file in SQL Server like SSMS:
 
 ---
 
-## 📡 6. Python Producer — Stream Data Into Kafka
+## 6. Python Producer — Stream Data Into Kafka
 
 The producer fetches live electricity flow data from ElectricityMaps API and sends it to Kafka every 5 minutes.
 
@@ -159,7 +123,7 @@ Sent: 2026-09-22T18:00:00Z
 
 ---
 
-## 🧩 7. Python Consumer — Insert Kafka Messages Into SQL Server
+## 7. Python Consumer — Insert Kafka Messages Into SQL Server
 
 The consumer listens to Kafka and inserts each message into SQL Server.
 
@@ -178,7 +142,7 @@ Inserted 24 rows for 2026-09-22T18:00:00Z
 
 ---
 
-## 🔍 8. Verify Data in SQL Server
+## 8. Verify Data in SQL Server
 
 Run:
 
@@ -198,7 +162,7 @@ You should see rows for:
 
 ---
 
-## 📊 9. View Kafka Messages (Optional)
+## 9. View Kafka Messages (Optional)
 
 To inspect messages:
 
@@ -211,7 +175,7 @@ docker exec -it kafka kafka-console-consumer \
 
 ---
 
-## 🧱 10. Troubleshooting
+## 10. Troubleshooting
 
 ### ❌ Python producer cannot reach Kafka  
 Error:
@@ -250,7 +214,7 @@ data['zone']
 
 ---
 
-## 🎉 11. Summary
+## 11. Summary
 
 This project demonstrates a full real‑time streaming pipeline:
 
@@ -268,15 +232,3 @@ You now have:
 
 ---
 ```
-
----
-
-If you want, I can also generate:
-
-- a downloadable ZIP containing all files  
-- a GitHub description section  
-- a project architecture diagram  
-- a “How it works” animation  
-- badges for your GitHub repo  
-
-Just tell me what you want next, Fatemeh.
