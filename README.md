@@ -1,4 +1,3 @@
----
 
 ```markdown
 # Real‑Time Kafka → SQL Server Pipeline (Electricity Flows)
@@ -15,7 +14,6 @@ It includes:
 - SQL scripts — Create database, schema, and table
 ```
 
----
 
 ## 1. Prerequisites
 
