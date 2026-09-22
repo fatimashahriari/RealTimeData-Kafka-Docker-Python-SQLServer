@@ -1,5 +1,0 @@
-CREATE DATABASE StreamingDB;
-GO
-
-USE StreamingDB;
-GO

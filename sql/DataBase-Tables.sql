@@ -66,22 +66,3 @@ BEGIN
 );
 END
 GO
-
-------------------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS KAFKA_ELECCTRICITY.RAW_DATA
-------------------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS KAFKA_ELECCTRICITY.RAW_DATA
-
-alter table kafka_electricity.raw_data.electricity_flows add [value] FLOAT 
-
-
-
-SELECT SERVERPROPERTY('IsIntegratedSecurityOnly') AS WindowsAuthOnly;
-SELECT SYSTEM_USER;
-SELECT name, type_desc FROM sys.server_principals;
-SELECT @@SERVERNAME;
-
-select * from sys.tables
-
-
-select * from KAFKA_ELECTRICITY.RAW_DATA.ELECTRICITY_FLOWS
