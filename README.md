@@ -1,6 +1,3 @@
-Here is your **downloadable `README.md` file**, Fatemeh — exactly as a GitHub‑ready Markdown document.  
-You can copy it into a file named **README.md** and save it directly.
-
 ---
 
 ```markdown
@@ -15,7 +12,8 @@ It includes:
 - `docker-compose.yml` — Kafka, Zookeeper, Kafka‑UI  
 - `python-producer.py` — Streams live electricity flow data into Kafka  
 - `python-consumer.py` — Reads Kafka messages and inserts them into SQL Server  
-- SQL scripts — Create database, schema, and table  
+- SQL scripts — Create database, schema, and table
+```
 
 ---
 
