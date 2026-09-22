@@ -1,7 +1,7 @@
 
-```markdown
 # Real‑Time Kafka → SQL Server Pipeline (Electricity Flows)
 
+```markdown
 This project demonstrates a complete real‑time data pipeline:
 
 **ElectricityMaps API → Kafka (Docker) → Python Consumer → SQL Server**
