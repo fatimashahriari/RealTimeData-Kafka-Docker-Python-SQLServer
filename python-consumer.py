@@ -49,7 +49,7 @@ for data in consumer:
     datetime = msg['data'][0]['datetime']
     updatedAt = msg['data'][0]['updatedAt']
 
-    for value in msg['data'][0]['import'].values():
+    for key, value in msg['data'][0]['import'].items():
         rows.append((
             zone,
             temporalGranularity,
@@ -57,8 +57,8 @@ for data in consumer:
             datetime,
             updatedAt,
             value,
-            True,
-            False
+            key,
+            ""
         ))
 
     for key, value in msg['data'][0]['export'].items():
@@ -69,8 +69,8 @@ for data in consumer:
             datetime,
             updatedAt,
             value,
-            False,
-            True
+            "",
+            key
         ))
 
     cursor.executemany("""

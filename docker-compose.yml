@@ -20,7 +20,10 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092   #if it doesn't work, try changing localhost to "kafka" or "broker". localhost is used when python in on windows and kafka ins on Docker (Linux).
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-
+    # Retention settings go here
+      KAFKA_LOG_RETENTION_HOURS: 300        # keep data for 7 days
+      KAFKA_LOG_RETENTION_BYTES: -1         # unlimited size
+      KAFKA_LOG_SEGMENT_BYTES: 1073741824   # 1GB segments
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     ports:

@@ -50,16 +50,16 @@ IF NOT EXISTS(
     FROM sys.tables t
     JOIN sys.schemas s
     ON t.schema_id = s.schema_id
-    WHERE t.name = 'DAY_AHEAD_PRICE'
+    WHERE t.name = 'TOTAL_LOAD'
     AND s.name = 'RAW_DATA'
 )
 BEGIN
-    CREATE TABLE [KAFKA_ELECTRICITY].[RAW_DATA].[DAY_AHEAD_PRICE](
+    CREATE TABLE [KAFKA_ELECTRICITY].[RAW_DATA].[TOTAL_LOAD](
 	    zone NVARCHAR(50),
 	    datetime DATETIME2,
 	    createdAt DATETIME2,
 	    updatedAt DATETIME2,
-	    value INT,
+	    value FLOAT,
 	    unit NVARCHAR(20),
     	source NVARCHAR(70),
     	temporalGranularity NVARCHAR(10)
