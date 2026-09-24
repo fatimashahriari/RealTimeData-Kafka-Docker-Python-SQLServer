@@ -33,7 +33,7 @@ conn.commit()
 
 #Get data from Kafka and insert into SQL Server
 consumer = KafkaConsumer(
-    "realtime-data-electricity-flows",
+    "realtime-data-electricity-flows_history",
     bootstrap_servers="localhost:9092",
     auto_offset_reset="earliest",
     value_deserializer=lambda v: json.loads(v.decode("utf-8"))

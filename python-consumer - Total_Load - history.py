@@ -24,7 +24,7 @@ except Exception as e:
 # Check if table exists: xtype='U' --> (user-defined table)
 cursor = conn.cursor()
 cursor.execute("""
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='ELECTRICITY_FLOWS' AND xtype='U') 
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='TOTAL_LOAD' AND xtype='U') 
 BEGIN
     PRINT 'Table does not exist.';
 END
@@ -33,7 +33,7 @@ conn.commit()
 
 #Get data from Kafka and insert into SQL Server
 consumer = KafkaConsumer(
-    "realtime-data-electricity-flows",
+    "realtime-data-electricity-load_history",
     bootstrap_servers="localhost:9092",
     auto_offset_reset="earliest",
     value_deserializer=lambda v: json.loads(v.decode("utf-8"))
@@ -43,40 +43,25 @@ for data in consumer:
     msg = data.value
     rows = []
 
-    zone = msg['zone']
-    temporalGranularity = msg['temporalGranularity']
-    unit = msg['unit']
+    zone = msg['data'][0]['zone']
+    temporalGranularity = msg['data'][0]['temporalGranularity']
+    unit = msg['data'][0]['unit']
     datetime = msg['data'][0]['datetime']
     updatedAt = msg['data'][0]['updatedAt']
+    createdAt = msg['data'][0]['createdAt']
+    value = msg['data'][0]['value']
+    source = msg['data'][0]['source']
+    isEstimated = msg['data'][0]['isEstimated']
+    estimationMethod = msg['data'][0]['estimationMethod']
+    isHistoryLoad = TRUE
 
-    for key, value in msg['data'][0]['import'].items():
-        rows.append((
-            zone,
-            temporalGranularity,
-            unit,
-            datetime,
-            updatedAt,
-            value,
-            key,
-            ""
-        ))
 
-    for key, value in msg['data'][0]['export'].items():
-        rows.append((
-            zone,
-            temporalGranularity,
-            unit,
-            datetime,
-            updatedAt,
-            value,
-            "",
-            key
-        ))
+    rows.append((zone, temporalGranularity, unit, datetime, updatedAt, createdAt, value, source, isEstimated, estimationMethod, isHistoryLoad))
 
     cursor.executemany("""
-        INSERT INTO KAFKA_ELECTRICITY.RAW_DATA.ELECTRICITY_FLOWS
-        (zone, temporalGranularity, unit, datetime, updatedAt, value, import, export)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO KAFKA_ELECTRICITY.RAW_DATA.TOTAL_LOAD
+        (zone, temporalGranularity, unit, datetime, updatedAt, createdAt, value, source, isEstimated, estimationMethod, isHistoryLoad)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, rows)
 
     conn.commit()

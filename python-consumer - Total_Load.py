@@ -24,7 +24,7 @@ except Exception as e:
 # Check if table exists: xtype='U' --> (user-defined table)
 cursor = conn.cursor()
 cursor.execute("""
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='ELECTRICITY_FLOWS' AND xtype='U') 
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='TOTAL_LOAD' AND xtype='U') 
 BEGIN
     PRINT 'Table does not exist.';
 END
@@ -33,7 +33,7 @@ conn.commit()
 
 #Get data from Kafka and insert into SQL Server
 consumer = KafkaConsumer(
-    "realtime-data-electricity-flows",
+    "realtime-data-electricity-load",
     bootstrap_servers="localhost:9092",
     auto_offset_reset="earliest",
     value_deserializer=lambda v: json.loads(v.decode("utf-8"))
@@ -46,37 +46,21 @@ for data in consumer:
     zone = msg['zone']
     temporalGranularity = msg['temporalGranularity']
     unit = msg['unit']
-    datetime = msg['data'][0]['datetime']
-    updatedAt = msg['data'][0]['updatedAt']
+    datetime = msg['datetime']
+    updatedAt = msg['updatedAt']
+    createdAt = msg['createdAt']
+    value = msg['value']
+    source = msg['source']
+    isEstimated = msg['isEstimated']
+    estimationMethod = msg['estimationMethod']
 
-    for key, value in msg['data'][0]['import'].items():
-        rows.append((
-            zone,
-            temporalGranularity,
-            unit,
-            datetime,
-            updatedAt,
-            value,
-            key,
-            ""
-        ))
 
-    for key, value in msg['data'][0]['export'].items():
-        rows.append((
-            zone,
-            temporalGranularity,
-            unit,
-            datetime,
-            updatedAt,
-            value,
-            "",
-            key
-        ))
+    rows.append((zone, temporalGranularity, unit, datetime, updatedAt, createdAt, value, source, isEstimated, estimationMethod))
 
     cursor.executemany("""
-        INSERT INTO KAFKA_ELECTRICITY.RAW_DATA.ELECTRICITY_FLOWS
-        (zone, temporalGranularity, unit, datetime, updatedAt, value, import, export)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO KAFKA_ELECTRICITY.RAW_DATA.TOTAL_LOAD
+        (zone, temporalGranularity, unit, datetime, updatedAt, createdAt, value, source, isEstimated, estimationMethod)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, rows)
 
     conn.commit()

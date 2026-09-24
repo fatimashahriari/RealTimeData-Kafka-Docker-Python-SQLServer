@@ -39,4 +39,4 @@ class ElectricityProducer:
                 from datetime import datetime
                 print(f"Sent {name.upper()} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-            time.sleep(300)
+            time.sleep(3600)

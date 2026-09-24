@@ -62,6 +62,8 @@ BEGIN
 	    value FLOAT,
 	    unit NVARCHAR(20),
     	source NVARCHAR(70),
+        isEstimated BIT,
+        estimationMethod NVARCHAR(70),
     	temporalGranularity NVARCHAR(10)
 );
 END
